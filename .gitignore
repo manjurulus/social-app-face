@@ -1,0 +1,46 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Logs
+logs/
+*.log
+*.log.*
+*.out
+*.pid
+*.gz
+
+# Coverage reports
+coverage/
+lcov-report/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+backend/.env        # ✅ ignore only backend .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Misc
+*.tsbuildinfo
