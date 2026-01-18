@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { memoryStorage } from 'multer';
 import { PostsModule } from './modules/posts/posts.module';
 import { AuthModule } from './modules/auth/auth.module';
 import * as Joi from 'joi';
@@ -31,15 +31,9 @@ import * as Joi from 'joi';
     }),
 
     // 🔥 THIS WAS MISSING (CAUSE OF 500)
-    // MulterModule.register({
-    //   storage: diskStorage({
-    //     destination: './uploads',
-    //     filename: (req, file, cb) => {
-    //       const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    //       cb(null, unique + '-' + file.originalname);
-    //     },
-    //   }),
-    // }),
+    MulterModule.register({
+      storage: memoryStorage(), // ✅ memory storage
+    }),
 
     AuthModule,
     PostsModule,

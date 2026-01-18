@@ -1,3 +1,4 @@
+// src/modules/posts/posts.controller.ts
 import {
   Controller,
   Post as HttpPost,
@@ -20,7 +21,7 @@ export class PostsController {
     @Body() body: { content: string; userId: string },
     @UploadedFile() file?: Express.Multer.File,
   ) {
-    return this.postsService.create(body.content, file, body.userId);
+    return this.postsService.create(body.content, body.userId, file);
   }
 
   @Get()
@@ -28,13 +29,13 @@ export class PostsController {
     return this.postsService.findAll();
   }
 
-  // 👍 Like
+  // Like a post
   @HttpPost(':id/like')
   like(@Param('id') id: string, @Body('userId') userId: string) {
     return this.postsService.toggleLike(id, userId);
   }
 
-  // 💬 Comment
+  // Comment on a post
   @HttpPost(':id/comment')
   comment(
     @Param('id') id: string,
