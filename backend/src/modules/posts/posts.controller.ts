@@ -1,27 +1,22 @@
 import {
   Controller,
-  Post,
+  Post as HttpPost,
   Get,
   Body,
+  Param,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { memoryStorage } from 'multer';
 import { PostsService } from './posts.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post()
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: memoryStorage(),
-      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-    }),
-  )
-  async create(
+  @HttpPost()
+  @UseInterceptors(FileInterceptor('file'))
+  create(
     @Body() body: { content: string; userId: string },
     @UploadedFile() file?: Express.Multer.File,
   ) {
@@ -29,7 +24,22 @@ export class PostsController {
   }
 
   @Get()
-  async findAll() {
+  findAll() {
     return this.postsService.findAll();
+  }
+
+  // 👍 Like
+  @HttpPost(':id/like')
+  like(@Param('id') id: string, @Body('userId') userId: string) {
+    return this.postsService.toggleLike(id, userId);
+  }
+
+  // 💬 Comment
+  @HttpPost(':id/comment')
+  comment(
+    @Param('id') id: string,
+    @Body() body: { userId: string; text: string },
+  ) {
+    return this.postsService.addComment(id, body.userId, body.text);
   }
 }
